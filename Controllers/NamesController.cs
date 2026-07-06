@@ -67,17 +67,17 @@ namespace REST.Controllers
         /// <param name="item"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> AddName(NameItem item)
+        public async Task<IActionResult> AddName(string name)
         {
-            if (item.Id == Guid.Empty)
+            var nameItem = new NameItem
             {
-                item.Id = Guid.NewGuid();
-            }
-
-            dbContext.Names.Add(item);
+                //Id is automatically generated when the new object was created, per model NameItem.cs.
+                Name = name
+            };
+            dbContext.Names.Add(nameItem);
             await dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetName), new { id = item.Id }, item);
+            return CreatedAtAction(nameof(GetName), new { id = nameItem.Id }, nameItem.Name);
         }
 
         /// <summary>
